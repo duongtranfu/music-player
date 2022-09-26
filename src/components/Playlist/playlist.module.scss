@@ -1,0 +1,46 @@
+.playList {
+  height: 100%;
+  .listSong {
+    display: inline-block;
+    height: 100%;
+    width: 35%;
+    vertical-align: top;
+    overflow-y: scroll;
+    .libraryTitle {
+      display: flex;
+      padding: 20px;
+      font-size: 25px;
+      font-weight: 600;
+    }
+    .itemSong {
+      &.active {
+        background-color: #9BBAE7;
+      }
+      display: flex;
+      padding: 20px;
+      cursor: pointer;
+      img {
+        width: 94px;
+        height: auto;
+        margin-right: 12px;
+      }
+      .detailThumbnail {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        .artist {
+          font-size: 12px;
+        }
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .song {
+    display: inline-block;
+    height: 100%;
+    width: 65%;
+    vertical-align: top;
+  }
+}
