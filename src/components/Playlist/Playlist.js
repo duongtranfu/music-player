@@ -1,10 +1,11 @@
-import react, { useState } from 'react';
+import { useState } from 'react';
 import { Player } from '../Player';
 import styles from './playlist.module.scss';
 
 export const Playlist = ({ songs = [] }) => {
   const firstSong = songs[0];
   const [selectedSong, setSelectedSong] = useState(firstSong);
+  const [mode, setMode] = useState('loop'); // loop or random
   const handleSelectSong = song => {
     return () => {
       setSelectedSong(song);
@@ -31,10 +32,34 @@ export const Playlist = ({ songs = [] }) => {
     setSelectedSong(songs[currentSongIndex - 1]);
   }
 
+  const randomSongInList = () => {
+    const currentSongIndex = songs.findIndex(song => song.id === selectedSong.id);
+    const randomIndex = Math.floor(Math.random() * songs.length);
+    let randomSong;
+    if (randomIndex === currentSongIndex) {
+      randomSong = songs[randomIndex + 1];
+    } else {
+      randomSong = songs[randomIndex];
+    }
+    setSelectedSong(randomSong);
+  }
+
   const handleChangeSong = (action) => {
     if (action === 'back') {
       handleBackSong();
     } else if (action === 'next') {
+      handleNextSong();
+    }
+  }
+
+  const handleToggleMode = () => {
+    setMode(mode === 'loop' ? 'random' : 'loop');
+  }
+
+  const handleEndASong = () => {
+    if (mode === 'random') {
+      randomSongInList();
+    } else {
       handleNextSong();
     }
   }
@@ -59,10 +84,13 @@ export const Playlist = ({ songs = [] }) => {
         {
           selectedSong?.audio ?
             <Player
+              mode={mode}
               url={selectedSong.audio}
               picture={selectedSong.cover}
               artist={selectedSong.artist}
               onChangeSong={handleChangeSong}
+              onEndASong={handleEndASong}
+              toggleMode={handleToggleMode}
             /> :
             <h3>Can't find song's source</h3>
         }
