@@ -11,6 +11,34 @@ export const Playlist = ({ songs = [] }) => {
     }
   }
 
+  const handleNextSong = () => {
+    const currentSongIndex = songs.findIndex(song => song.id === selectedSong.id);
+    if (currentSongIndex === songs.length - 1) {
+      const nextSong = songs[0];
+      setSelectedSong(nextSong);
+      return;
+    }
+    setSelectedSong(songs[currentSongIndex + 1]);
+  }
+
+  const handleBackSong = () => {
+    const currentSongIndex = songs.findIndex(song => song.id === selectedSong.id);
+    if (currentSongIndex === 0) {
+      const nextSong = songs[songs.length - 1];
+      setSelectedSong(nextSong);
+      return;
+    }
+    setSelectedSong(songs[currentSongIndex - 1]);
+  }
+
+  const handleChangeSong = (action) => {
+    if (action === 'back') {
+      handleBackSong();
+    } else if (action === 'next') {
+      handleNextSong();
+    }
+  }
+
   return (
     <div className={styles.playList}>
       <div className={styles.listSong}>
@@ -28,7 +56,16 @@ export const Playlist = ({ songs = [] }) => {
         ))}
       </div>
       <div className={styles.song}>
-        {selectedSong?.audio ? <Player url={selectedSong.audio} /> : <h3>Can't find song's source</h3>}
+        {
+          selectedSong?.audio ?
+            <Player
+              url={selectedSong.audio}
+              picture={selectedSong.cover}
+              artist={selectedSong.artist}
+              onChangeSong={handleChangeSong}
+            /> :
+            <h3>Can't find song's source</h3>
+        }
       </div>
     </div>
   );
